@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Lluvia de elementos</title>
+	<style>
+		#boxcube{
+          position: relative;
+          height:100vh;
+          border:1px solid #000;
+		        overflow: hidden;
+        }
+
+        #create{
+          position: relative;
+          z-index:50;
+        }
+
+        .cubo{
+	      font-size:24px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          transition:all 2ms ease-in;
+          animation: forma 3s linear 500ms infinite alternate;
+        }
+
+        @keyframes forma{
+          0%{
+            border-radius: 0%;
+          }
+          20%{
+            border-radius: 50%;
+		        transform: rotateX(180deg) rotateY(180deg);
+          }
+          40%{
+            border-radius: 0%;
+          }
+          60%{
+            border-radius: 50%;
+          }
+          80%{
+            border-radius: 0%;
+          }
+          100%{
+            border-radius: 50%;
+          }
+        }
+
+	</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+	<h1>Lluvia de elementos</h1>
+	<div id="boxcube"></div>
+	<script>
+	let box = document.getElementById('boxcube');
+	const icon = ['fab fa-react', 'fab fa-js-square', 'fab fa-html5'];
+	const color = ['blue', 'yellow', 'orange'];
+
+	setInterval('creatingElement()', 1000);
+	setInterval('creatingElement()', 1500);
+
+	function creatingElement(){
+        let px = getNumberRandom(0, Math.ceil(window.innerWidth/1.2)), 
+        py = getNumberRandom(0, Math.ceil(window.innerHeight/1.2));
+
+  	    let div = document.createElement('div'), 
+        indexItem = getNumberRandom(0,2),
+        fontSize = getNumberRandom(24, 45);
+
+		div.setAttribute('class', `cubo ${icon[indexItem]}`);
+		div.style.color = `${color[indexItem]}`;
+        div.style.fontSize = `${fontSize}px`;
+		div.style.top = `-150px`;
+		div.style.left = `-150px`;
+		
+        box.appendChild(div);
+
+		let top = py, 
+			left = px;
+
+		setInterval(()=>{
+			top = top + 3;
+			left = left + 3;
+			div.style.left = `${left}px`;
+			div.style.top = `${top}px`;
+		},80);
+
+		setInterval(()=>{
+			if(box.firstChild){
+				let firstEl = box.children[0].getBoundingClientRect();
+				if(firstEl.y > box.clientHeight || firstEl.x > box.clientWidth){
+				    box.removeChild(box.firstChild);
+				}
+			}
+		}, 60);
+
+	}
+
+	function getNumberRandom(min, max){
+  	    return Math.floor((Math.random() * (max - min + 1)) + min);
+	}
+
+	</script>
+</body>
+</html>

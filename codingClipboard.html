@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Coding - Clipboard</title>
+<style>
+    kbd {
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 0.1em 0.5em;
+	margin: 0 0.2em;
+	box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #fff inset;
+	background-color: #f7f7f7;
+    }
+    .zona-code{
+        position: relative;
+        color: #E4E4E4; 
+    }
+    .zona-code > .btn{
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        display: inline-block;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 15px;
+        box-sizing: border-box;
+        border: 1px solid #fff;
+        cursor: pointer;
+        transition: all 250ms ease;
+    }
+    .zona-code > .btn:hover{
+            background-color: #2E2E2E;
+    }
+    .btnCopy> span{
+        position: absolute;
+        bottom: -25px;
+        left: 0px;
+        font-size: 10px;
+        display: block;
+        min-width: auto;
+        text-align: center;
+    }
+    .zc-js{
+        background-color: #2E2E2E; 
+        padding:10px 15px; 
+        border-radius:5px; 
+        overflow: auto;
+    }
+    .lg-esp{
+        color: #FD374B;    
+    }
+    .lg-esp-mtd{
+        color: #4DF559;     
+    }
+    .params{
+        color: #FFAB00;    
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<h1>Coding - Clipboard</h1>
+<h3>Etiqueta pre</h3>
+<!-- Zona 1 -->
+<div class="zona-code">
+    <i class="far fa-copy btn btnCopy"><span><spam></i>
+<pre class="zc-js code-js">
+<code>
+<span class="lg-esp">function</span> <span class="lg-esp-mtd">maxNumber</span>(<span class="params">a</span>, <span class="params">b</span>) {
+    <span class="lg-esp">if</span>(a <span class="lg-esp">></span> b)
+      <span class="lg-esp">return</span> a;
+    <span class="lg-esp">else</span>
+      <span class="lg-esp">return</span> b;
+}
+</code>
+</pre>
+</div>
+<!-- Zona 2 -->
+<div class="zona-code">
+    <i class="far fa-copy btn btnCopy"><span><spam></i>
+<pre class="zc-js code-js">
+<code>
+<span class="lg-esp">function</span> <span class="lg-esp-mtd">minNumber</span>(<span class="params">a</span>, <span class="params">b</span>) {
+    <span class="lg-esp">if</span>(a <span class="lg-esp"><</span> b)
+      <span class="lg-esp">return</span> a;
+    <span class="lg-esp">else</span>
+      <span class="lg-esp">return</span> b;
+}
+</code>
+</pre>
+</div>
+
+<br>
+<h3>Etiqueta kbd</h3>
+<p>
+Para pegar el contenido copiado se debe pulsar <kbd>Ctrl+V</kbd> o <kbd>Shift+Ins</kbd>.
+</p>
+
+
+<script>
+    let zonaCode = document.querySelectorAll('.zona-code');
+    
+    zonaCode.forEach(zc => {
+        let btnCopy = zc.children[0];
+        let code = zc.children[1];
+        btnCopy.addEventListener('click', ()=>{
+        /* Copy the text inside the text field */
+            navigator.clipboard.writeText(code.innerText);
+            btnCopy.children[0].innerText = "Copy text";
+
+            setTimeout(()=> {
+                btnCopy.children[0].innerText = ""
+            }, 1000);
+        });
+
+    });
+</script>
+</body>
+</html>
+
+
+

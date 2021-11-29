@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Cubo 3D</title>
+	<style>
+.container {
+  width: 150px;
+  height: 150px;
+  margin: 50px auto;
+  position: relative;
+  perspective: 400px;
+}
+
+#cube {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+
+#cube figure {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 2px solid black;
+}
+
+#cube .back {
+  background: hsla(0, 100%, 50%, 0.5);
+  transform: rotateX(0deg) translateZ(-75px);
+}
+
+#cube .left {
+  background: hsla(60, 100%, 50%, 0.5);
+  transform: rotateY(90deg) translateZ(-75px);
+}
+
+#cube .bottom {
+  background: hsla(120, 100%, 50%, 0.5);
+  transform: rotateX(90deg) translateZ(-75px);
+}
+
+#cube .front {
+  background: hsla(180, 100%, 50%, 0.5);
+  transform: rotateX(0deg) translateZ(75px);
+}
+
+#cube .right {
+  background: hsla(240, 100%, 50%, 0.5);
+  transform: rotateY(90deg) translateZ(75px);
+}
+
+#cube .top {
+  background: hsla(300, 100%, 50%, 0.5);
+  transform: rotateX(90deg) translateZ(75px);
+}
+
+.botones {
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+  position: relative;
+ }
+
+.boton {
+  /*estructura*/
+  width: 30px;
+  height: 30px;
+  background-color: black;
+  border-radius: 50%;
+  position: absolute;
+  /*texto*/ 
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  user-select: none;
+}
+
+#abajo {
+  top: 35px;
+}
+
+#izquierda {
+  top: 35px;
+  left: -35px;
+}
+
+#derecha {
+  top: 35px;
+  left: 35px;
+}
+	</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+<section class="container">
+  <div id="cube">
+    <figure class="back"></figure>
+    <figure class="left"></figure>
+    <figure class="bottom"></figure>
+    <figure class="front"></figure>
+    <figure class="right"></figure>
+    <figure class="top"></figure>
+  </div>
+</section>
+<section class="botones">
+  <div class="boton" id="arriba">▲</div>
+  <div class="boton" id="abajo">▼</div>
+  <div class="boton" id="izquierda">◄</div>
+  <div class="boton" id="derecha">►</div>
+</section>
+
+<script>
+var angX = 0;
+var angY = 0;
+
+$('.boton').on('click', function() {
+  switch ($(this).attr("id")) {
+    case "arriba":
+      angX = angX + 90;
+      break;
+    case "abajo":
+      angX = angX - 90;
+      break;
+    case "derecha":
+      angY = angY + 90;
+      break;
+    case "izquierda":
+      angY = angY - 90;
+      break;
+  }
+  $('#cube').attr('style', 'transform: rotateX(' + angX + 'deg) rotateY(' + angY + 'deg);')
+});
+</script>
+</body>
+</html>
