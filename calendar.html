@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FullCalendar</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css">
+  <script src="https://cdn.jsdelivr.net/combine/npm/sweetalert2@11.4.8,npm/fullcalendar@5.10.2,npm/moment@2.29.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container-xl box-calendar"></div>
+
+<!-- Modal -->
+<div class="modal fade" id="eventModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Event</h5>
+      </div>
+      <div class="modal-body">
+        <form id="eventForm" method="POST">
+          <input type="hidden" aria-label="id" class="form-control" id="inputID">
+          <div class="input-group mt-2">
+            <label for="inputColor" class="input-group-prepend">
+              <span class="input-group-text">Background</span>
+            </label>
+            <input type="color" aria-label="Background" class="form-control" id="inputColor">
+          </div>
+          <div class="input-group mt-2">
+            <label for="inputTitle" class="input-group-prepend">
+              <span class="input-group-text">Title</span>
+            </label>
+            <input type="text" aria-label="Title" class="form-control" id="inputTitle">
+          </div>
+          <div class="input-group mt-2 mb-2">
+            <label for="inputDate" class="input-group-prepend">
+              <span class="input-group-text">Date</span>
+            </label>
+            <input type="date" aria-label="Date" class="form-control" id="inputDate">
+          </div>
+          <div class="input-group mt-2 mb-2">
+            <label for="inputDescription" class="input-group-prepend">
+              <span class="input-group-text">Description</span>
+            </label>
+            <textarea class="form-control" id="inputDescription" style="max-height:200px;min-height:100px;"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetForm()">Cancel</button>
+        <button type="button" id="btn-event" class="btn btn-primary" data-action="post" onclick="sendFormEvent(this)">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const eventState = [];
+
+function drawnCalendar(){
+  var calendarEl = document.querySelector('.box-calendar');
+  handleFullCallendar(calendarEl);
+}
+
+function handleFullCallendar(calendarElement){
+  var calendar = new FullCalendar.Calendar(calendarElement, {
+    // 'dayGridMonth', dayGridWeek', 'timeGridDay', 'listWeek' .
+    initialView: 'dayGridMonth',
+    headerToolbar: { 
+      left:'prev, next, today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay' 
+    }, // buttons for switching between views
+    selectable: true,
+    events: eventState,
+    eventClick: function(response){
+      $('#btn-event').attr("data-action", "put");
+      $('#eventModal').modal('show');
+      
+      $('#inputDate').val(moment(response.event.start).format('YYYY-MM-DD'));
+      $('#inputID').val(response.event.id);
+      $('#inputColor').val(response.event.backgroundColor);
+      $('#inputTitle').val(response.event.title);
+      $('#inputDescription').val(response.event.extendedProps.description);
+    },
+    dateClick: function(response) {
+      $('#btn-event').attr("data-action", "post");
+      $('#eventModal').modal('show');
+      
+      $('#inputDate').val(response.dateStr);
+      $('#inputTitle').trigger('focus');
+    },
+    select: function(response){
+      //console.log(response);
+    }
+    
+  });
+  //calendar.changeView("dayGridMonth"); 
+  calendar.render();
+}
+
+document.addEventListener('DOMContentLoaded', drawnCalendar);
+
+function resetForm(){
+  $('#btn-event').attr("data-action", "post");
+  $("#eventForm").trigger('reset');
+}
+
+function sendFormEvent(el){
+  if(!validatedInput()){return;}
+  if($(el).attr("data-action") == "post"){
+    addAndUpdateValues();
+    Swal.fire("Success", "Event registered!", "success");
+  }else if($(el).attr("data-action") == "put"){
+    removeData();
+    addAndUpdateValues(parseInt($('#inputID').val()));
+    Swal.fire("Success", "Event updated!", "success");
+  }
+  drawnCalendar();
+  resetForm();
+  $('#eventModal').modal('hide');
+  $(el).attr("data-action", "post");
+}
+
+function validatedInput(){
+  if(!$('#inputColor').val() || !$('#inputTitle').val() || !$('#inputDescription').val() || !$('#inputDate').val()){
+    Swal.fire("Warning", "All required fields", "warning");
+    return false;
+  }
+  
+  return true;
+}
+
+function addAndUpdateValues(uuid = new Date().getTime()){
+  eventState.push({
+    id: uuid,
+    color: $('#inputColor').val(),
+    title: $('#inputTitle').val(),
+    description: $('#inputDescription').val(),
+    start: $('#inputDate').val()
+  });
+}
+
+function removeData(uuid){
+  //SEARCH
+  let id = parseInt(uuid);
+  const finded = eventState.find(data => data.id == id);
+  // INDEX
+  let indexFinded = eventState.indexOf(finded);
+  // DELETE
+  eventState.splice(indexFinded, 1);
+}
+</script>
+</body>
+</html>
