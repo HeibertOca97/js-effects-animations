@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Intersetion Observer</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		
+		body{
+			background-color: rgba(0,12,12,.9);
+			color: #fff;
+		}
+
+		.container-banner{
+			width: 100%;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.article{
+			max-width: 600px;
+			line-height: 1.8em;
+			margin: auto;
+		}
+
+		.article p{
+			margin: 10px auto;
+		}
+
+		.article picture{
+			position: relative;
+			width: 90%;
+			margin: 15px auto;
+		}
+
+		.article img{ 
+			width: 100%; 
+			height: 100%; 
+			display: block; 
+			object-fit: cover;
+			transition: all 350ms ease-in-out;
+			opacity: 0;
+			transform: scale(0.9);
+		}
+
+		.article img.visible{
+			opacity: 1;
+		}
+
+		.article img.left{
+			transform: traslateX(-100px) scale(1);
+		}
+
+		.article img.right{
+			transform: traslateX(100px) scale(1);
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container-banner">
+	<h1>INTERSECTION OBSERVER</h1>
+	<h2>API OF JAVASCRIPT</h2>
+	</div>
+	<div class="article"></div>
+
+
+
+	<script>
+		const article = document.querySelector('.article'),
+			banner = document.querySelector('.container-banner');
+		const paragraph = "Ipsum laborum harum ratione porro sit praesentium. Dolores praesentium voluptas pariatur temporibus similique Incidunt placeat dignissimos vero eaque aliquam. Ut nam aut corrupti cupiditate nisi rem Sint amet aliquid vitae!";
+
+		const URL_BASE = "file:///home/heibert/Imágenes"
+
+		const url = [
+			"/funds desktop/612527.jpg", //Imagen del banner
+			"/funds desktop/598249.jpg",
+			"/funds desktop/82241.jpg",
+		];
+		
+		banner.style.background = `url("${URL_BASE}${url[0]}")`;
+		banner.style.backgroundPosition = "50% 50%";
+		banner.style.backgroundAttachment = "fixed";
+
+		function createImage(urlBase, urlImage, idName, className){
+			let img = new Image();
+			img.src = `${urlBase}${urlImage}`;
+			img.setAttribute("id", idName);
+			img.setAttribute("class", className);
+
+			let picture = document.createElement("picture");
+			picture.appendChild(img);
+			return picture;
+		}
+
+		function createParagraph(text){
+			let paragraph = document.createElement("p");
+			paragraph.innerHTML = text;
+			return paragraph;
+		}
+
+		function appendParagraph(num){
+			for(let i = 0; i < num; i++){
+				article.appendChild(createParagraph(paragraph));
+			}
+		}
+
+		// Crear y agregar contenido
+		appendParagraph(15);	
+		article.appendChild(createImage(URL_BASE, url[1], "img1", "left"));	
+		appendParagraph(15);	
+		article.appendChild(createImage(URL_BASE, url[2], "img2", "right"));	
+		appendParagraph(15);	
+
+		// APLICAR LA API
+		let img1 = document.getElementById("img1"),
+			img2 = document.getElementById("img2");
+		
+		const effectImage = (entradas, observador) => {
+			//console.log(entradas);
+			//console.log(observador);
+			entradas.forEach(entrada => {
+				if(entrada.isIntersecting){	
+					entrada.target.classList.add('visible');
+				}else{
+					entrada.target.classList.remove('visible');
+				}
+			});
+		}
+	
+		const observador =  new IntersectionObserver(effectImage, {
+			root: null,
+			rootMargin: '200px 0px 200px 0px',
+			threshold: 1.0, // 0.1 - 1.0
+		}); 
+
+		observador.observe(img1);
+		observador.observe(img2);
+
+	</script>
+</body>
+</html>
+
