@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Graphics with Plotly</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.14.0/plotly.min.js"></script>
+</head>
+<body>
+  <h1 style="text-align:center; margin: 25px 0;">Chats with Plotly</h1>
+  <div id="tester" style="width:600px;height:250px;margin: 50px auto;"></div>
+  <script>
+    const posts = [
+      {
+        name: "art 1",
+        view: 20,
+      },
+      {
+        name: "art 2",
+        view: 5,
+      },
+      {
+        name: "art 3",
+        view: 15,
+      },
+      {
+        name: "art 4",
+        view: 10,
+      },
+    ];
+    const tester = document.getElementById('tester');
+    const getByMaxView = posts.sort((a, b) => a.view > b.view && -1);
+    const getName = getByMaxView.map(item => item.name);
+    const getView = getByMaxView.map(item => item.view);
+
+    const data = [{
+      type: 'bar',
+      x: getName,
+      y: getView,
+    }];
+
+    Plotly.newPlot(tester, data);
+  </script>
+</body>
+</html>
+
