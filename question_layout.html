@@ -1,0 +1,185 @@
+<style>
+    
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header{
+  line-height: 3em;
+  margin-bottom: 25px; 
+  box-shadow: 0 5px 10px #eee;  
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+section.container-question > div{
+  width: 95%;
+  margin: 10px auto;
+}
+
+@media screen and (min-width: 780px){
+  section.container-question{
+    display: flex;
+    align-items: stretch;
+  }
+  
+  section.container-question > div{
+    width: 50%;
+    margin: 0;
+  }
+}
+
+.box-question h3{
+  margin: 15px 0px 15px 10px;
+}
+.box-question-description img{
+  width: 95%;
+  height: auto;
+  max-width: 400px;
+  margin: 10px auto;
+  display: block;
+}
+
+.box-options .check-option{
+  margin: 15px auto;
+  width: 98%;
+  box-shadow: 0 5px 10px #ccc;
+}
+.box-options .check-option > label{
+  display: block;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+.box-options .check-option > label:hover{
+  background-color: #eee;
+}
+
+.box-options .check-option > input{
+  display: none;
+}
+
+.box-options .check-option > input:checked + label{
+  background-color: #ccc;
+}
+
+.container-actions{
+  margin-top: 25px; 
+  box-shadow: 0 -5px 10px #eee;  
+}
+
+.container-actions .box-flex{
+    display: flex;
+    padding: 10px 0;
+}
+.container-actions .box-flex > div:nth-of-type(1){
+  width: 40%;
+  display: flex;
+  align-items: center;
+}
+.container-actions .box-flex > div:nth-of-type(2){
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.container-actions .box-flex > div:nth-of-type(2) > span{
+  font-weight: bold;
+  display: block;
+  margin: 0 10px;
+}
+
+.btn{
+  border: 0;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 0 10px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.btn-primary{
+  background-color: blue;
+  color: #fff;
+}
+
+</style>
+
+<header>
+  <div>Logo</div>
+</header>
+<section class="container-question">
+  <div class="box-question">
+   <h3>1. Section of Question</h3>
+   <div class="box-question-description">
+     <img src="https://miro.medium.com/max/800/1*BBfGL5WnDXEh24AtR7iSKg.png" />
+   </div>
+  </div>
+  <div class="box-options">
+    <h4>- Select a opcion</h4>
+    <div id="box-options"></div>
+  </div>
+</section>
+
+<section class="container-actions">
+  <div class="box-flex">
+    <div>
+      Propietary
+    </div>
+    <div>
+      <span>1:30</span>
+      <button class="btn btn-primary">Next</button>
+    </div>
+  </div>  
+</section>
+
+
+
+<script>
+const options = [
+  {
+    id: 1,
+    description: "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+  },
+  {
+    id: 2,
+    description: "Praesent tortor diam, dignissim quis magna quis, auctor tempus massa."
+  },
+  {
+    id: 3,
+    description: "Sed elit eros, cursus in commodo in, egestas et sapien."
+  },
+  {
+    id: 4,
+    description: "Mauris ac eros sed ex laoreet placerat. Quisque euismod leo vel lacus vulputate, vel semper tortor placerat. Nam maximus dictum magna in dictum."
+  },
+  {
+    id: 5,
+    description: "Vestibulum non nisl consequat, egestas leo rhoncus, commodo justo. Aliquam erat volutpat."
+  },
+];
+
+const boxOptions = document.getElementById("box-options");
+
+function loadAnswersOption(){
+  let template = ``;
+  
+  for(let i = 0; i < options.length; i++){
+    template += `
+      <div class="check-option">
+        <input type="radio" name="opcion" id="${i}" />
+        <label for="${i}">${options[i].description}</label>
+      </div>
+    `;
+  }
+  boxOptions.innerHTML = template;
+}
+
+loadAnswersOption();
+
+
+</script>
